@@ -13,19 +13,22 @@ IMAGE_DIR = "Images"
 TRAIN_DIR = "Train"
 VALIDATE_DIR = "Validate"
 TEST_DIR = "TEST"
+POSSIBLE_SHAPES = ["Square","Triangle","Hexagon"]
 
 IMAGE_DIM_X = 254
 IMAGE_DIM_Y = 254
 
-NUM_IMAGES = 2000
+NUM_IMAGES = 40000
 
-def generate_image_bath(dir, number):
+def generate_image_batch(dir, number):
     if os.path.isdir(dir) != True:
         os.mkdir(dir)
+        for s in POSSIBLE_SHAPES:
+            os.mkdir(os.path.join(dir, s)) 
     
     imageName = "Shape "
     for i in range(number):        
-        shape = random.choice(["square","triangle","hexagon"])
+        shape = random.choice(POSSIBLE_SHAPES)
         image = np.zeros([IMAGE_DIM_X, IMAGE_DIM_Y, 3], dtype=np.uint8)
         buffer = 40
         y = random.randint(buffer, IMAGE_DIM_Y - buffer - 1)
@@ -36,7 +39,11 @@ def generate_image_bath(dir, number):
         dims = (x, y, s, angle)     
         image = draw_shape(image, shape, dims)
         imageName = "Shape {0} {1} {2} {3} {4} {5}.bmp".format(shape, i, x , y , s, angle)
-        filepath = os.path.join(dir, imageName)
+        save_dir = os.path.join(dir, shape)
+
+        filepath = os.path.join(save_dir, imageName)
+        #Make sub directory for generator
+        
         cv2.imwrite(filepath, image) 
 
 def rotate( vec, angle):
@@ -54,7 +61,7 @@ def draw_shape(image, shape, dims):
     # Get the center x, y and the size s
     x, y, s, angle = dims
     colour = (255,255,255)
-    if shape == 'square':
+    if shape == 'Square':
         #cv2.rectangle(image, (x-s, y-s), (x+s, y+s), colour, -1)
         x1 = -1*s
         y1 = -1*s
@@ -73,7 +80,7 @@ def draw_shape(image, shape, dims):
         #print("{0},{1} to {2},{3}".format(x1, y1, x1a, y1a))
         points = np.array([[(x1a, y1a), (x2a, y2a), (x3a, y3a), (x4a, y4a)]], dtype=np.int32)
         
-    elif shape == "triangle":
+    elif shape == "Triangle":
         x1 = 0  
         y1 = -s
         x2 = -1 * s/math.sin(math.radians(60))
@@ -90,7 +97,7 @@ def draw_shape(image, shape, dims):
                             (x3a, y3a),
                             ]], dtype=np.int32)
 
-    elif shape == "hexagon":
+    elif shape == "Hexagon":
         x1 = int(-1.0 * float(s))  
         y1 = 0
         x2 = int(-0.5 * float(s)) 
@@ -144,13 +151,13 @@ if __name__ == '__main__':
 
     dir = os.path.join(base_dir, TRAIN_DIR)
     print("Generating training images files in {0}".format(dir))
-    generate_image_bath(dir, int(NUM_IMAGES * 0.7))
+    generate_image_batch(dir, int(NUM_IMAGES * 0.5))
 
     dir = os.path.join(base_dir, VALIDATE_DIR)
     print("Generating validation images files in {0}".format(dir))
-    generate_image_bath(dir, int(NUM_IMAGES * 0.2))
+    generate_image_batch(dir, int(NUM_IMAGES * 0.25))
 
     dir = os.path.join(base_dir, TEST_DIR)
-    print("Generating validation images files in {0}".format(dir))
-    generate_image_bath(dir, int(NUM_IMAGES * 0.1))
+    print("Generating test images files in {0}".format(dir))
+    generate_image_batch(dir, int(NUM_IMAGES * 0.25))
         
