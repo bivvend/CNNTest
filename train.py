@@ -86,8 +86,12 @@ if __name__ == '__main__':
         validation_data = validation_generator,
         validation_steps = 50)  
     
-    model.save("cnn_shapes.h5")
-
+    model_json = model.to_json()
+    with open("model.json", "w") as json_file:
+        json_file.write(model_json)    
+    model.save_weights("cnn_shapes.h5")
+    print("Saved model to disk")
+    
     acc = history.history['acc']
     val_acc  = history.history['val_acc']
     loss = history.history['loss']

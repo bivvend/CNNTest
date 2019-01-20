@@ -33,7 +33,13 @@ def generate_image_batch(dir, number):
         buffer = 40
         y = random.randint(buffer, IMAGE_DIM_Y - buffer - 1)
         x = random.randint(buffer, IMAGE_DIM_X - buffer - 1)
-        angle = random.randint(0, 360)
+        angle = random.randint(-180, 180) # number will be rescaled based on shape
+        if shape == "Square":
+            angle = int(angle / 4)
+        if shape == "Triangle":
+            angle = int(angle / 3)
+        if shape == "Hexagon":
+            angle = int(angle / 6)
         # Size
         s = random.randint(buffer, int(IMAGE_DIM_X/4)) 
         dims = (x, y, s, angle)     
@@ -63,6 +69,7 @@ def draw_shape(image, shape, dims):
     colour = (255,255,255)
     if shape == 'Square':
         #cv2.rectangle(image, (x-s, y-s), (x+s, y+s), colour, -1)
+        
         x1 = -1*s
         y1 = -1*s
         x2 = s
@@ -81,6 +88,7 @@ def draw_shape(image, shape, dims):
         points = np.array([[(x1a, y1a), (x2a, y2a), (x3a, y3a), (x4a, y4a)]], dtype=np.int32)
         
     elif shape == "Triangle":
+        
         x1 = 0  
         y1 = -s
         x2 = -1 * s/math.sin(math.radians(60))
@@ -98,6 +106,7 @@ def draw_shape(image, shape, dims):
                             ]], dtype=np.int32)
 
     elif shape == "Hexagon":
+        
         x1 = int(-1.0 * float(s))  
         y1 = 0
         x2 = int(-0.5 * float(s)) 
