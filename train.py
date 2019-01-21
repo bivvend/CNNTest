@@ -60,7 +60,7 @@ if __name__ == '__main__':
         print("Labels batch shape:", labels_batch.shape)
         break
 
-    #Build covnet
+    #Build convnet
     model = models.Sequential()
     model.add(layers.Conv2D(32, (3,3), activation='relu', input_shape = (IMAGE_DIM_X, IMAGE_DIM_Y, 3)))
     model.add(layers.MaxPooling2D((2, 2)))

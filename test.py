@@ -8,6 +8,7 @@ import numpy as np
 import cv2
 import matplotlib
 import matplotlib.pyplot as plt
+import time
 
 from keras.preprocessing.image import ImageDataGenerator
 from keras import layers
@@ -36,13 +37,13 @@ if __name__ == '__main__':
     
 
     train_dir = os.path.join(base_dir, TRAIN_DIR)
-    print("Training images files in {0}".format(dir))
+    #print("Training images files in {0}".format(dir))
 
     val_dir = os.path.join(base_dir, VALIDATE_DIR)
-    print("Validation images files in {0}".format(dir))
+    #print("Validation images files in {0}".format(dir))
 
     test_dir = os.path.join(base_dir, TEST_DIR)
-    print("Test images files in {0}".format(dir))
+    #print("Test images files in {0}".format(dir))
 
     # load json and create model
     json_file = open(os.path.join(script_dir, 'model.json'), 'r')
@@ -56,9 +57,38 @@ if __name__ == '__main__':
     loaded_model.compile(loss='mean_squared_error',     #mean_squared_error 
                 optimizer=optimizers.RMSprop(lr=2e-5),
                 metrics=['acc'])
-
-    file_list = os.listdir(test_dir+ "\Hexagon")
-    print("Test directory ({0}) contains {1} files.".format(test_dir, len(file_list)))
     
-    print(cv2.imread(file_list[0]))
-    #loaded_model.predict(cv2.imread(file_list[0]))
+    tests = []
+    tests.append((0, "Hexagon"))
+    tests.append((1, "Square"))
+    tests.append((2, "Triangle"))
+
+    for test in tests:    
+        load_dir = test_dir + '\\' + test[1]
+        print("-------------------------------")
+        print("Testing {0}s....". format(test[1]))
+        
+        file_list = os.listdir(load_dir)
+        print("Test directory ({0}) contains {1} files.".format(load_dir, len(file_list)))
+        file_name_list = []
+        for file in file_list:
+            file_name_list.append(os.path.join(load_dir , file)) 
+        
+        all_images = []
+        for file in file_name_list:
+            img = cv2.imread(file)
+            img= img/255.0
+            all_images.append(img)
+
+        start = time.time()
+        x_train = np.array(all_images)
+        classes = loaded_model.predict_classes(x_train)
+        end = time.time()
+        
+        print("Predicted {0} classes in {1} seconds".format(len(all_images), end - start))
+        count = 0
+        for res in classes:
+            if res != test[0]:
+                count += 1
+        print("{0} errors detected ".format(count))
+        
