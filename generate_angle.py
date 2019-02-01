@@ -19,7 +19,7 @@ POSSIBLE_ANGLES = ["-30", "-25", "-20", "-10", "-5", "0", "5", "10", "15", "20",
 IMAGE_DIM_X = 254
 IMAGE_DIM_Y = 254
 
-NUM_IMAGES = 40000
+NUM_IMAGES = 2000
 
 def generate_image_batch(dir, number, angles_are_continuous):
     if os.path.isdir(dir) != True:
