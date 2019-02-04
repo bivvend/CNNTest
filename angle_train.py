@@ -80,12 +80,15 @@ if __name__ == '__main__':
                 optimizer=optimizers.RMSprop(lr=2e-5),
                 metrics=['acc']) 
 
+    print("Classes " + str(train_generator.class_indices))
+    time.sleep(10)
     history = model.fit_generator(
         train_generator,
         steps_per_epoch = 100,
         epochs = 50,
         validation_data = validation_generator,
         validation_steps = 50)  
+
     
     model_json = model.to_json()
     with open("angle_model.json", "w") as json_file:

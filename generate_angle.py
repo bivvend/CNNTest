@@ -18,8 +18,7 @@ POSSIBLE_ANGLES = ["-30", "-25", "-20", "-10", "-5", "0", "5", "10", "15", "20",
 
 IMAGE_DIM_X = 254
 IMAGE_DIM_Y = 254
-
-NUM_IMAGES = 2000
+NUM_IMAGES = 40000
 
 def generate_image_batch(dir, number, angles_are_continuous):
     if os.path.isdir(dir) != True:
@@ -34,7 +33,7 @@ def generate_image_batch(dir, number, angles_are_continuous):
         angle_name = random.choice(POSSIBLE_ANGLES)        
         angle = int(angle_name)
         if(angles_are_continuous):
-            angle = angle + random.randint(-4,4)            
+            angle = angle + random.randint(-2,2)            
         
         image = np.zeros([IMAGE_DIM_X, IMAGE_DIM_Y, 3], dtype=np.uint8)
         shape = SHAPE
@@ -172,4 +171,6 @@ if __name__ == '__main__':
     dir = os.path.join(base_dir, TEST_DIR) #Continuous angles
     print("Generating test images files in {0}".format(dir))
     generate_image_batch(dir, int(NUM_IMAGES * 0.25), True)
+
+    
         
