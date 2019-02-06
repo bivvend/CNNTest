@@ -96,8 +96,8 @@ if __name__ == '__main__':
         
         end = time.time()
         
-        if Shape == "Hexagon":
-            classes = {'-10': 0, '-20': 1, '-25': 2, '-30': 3, '-5': 4, '0': 5, '10': 6, '15': 7, '20': 8, '25': 9, '5': 10}
+        if Shape == "Round":
+            classes = {'0': 0, '10': 1, '15': 2, '20': 3, '25': 4, '30': 5, '35': 6, '40': 7, '5': 8}
 
         value_list = []
         for name, index in classes.items():
