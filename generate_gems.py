@@ -18,7 +18,7 @@ POSSIBLE_SHAPES = ["Round","Heart","Baguette","Oval","Princess"]
 IMAGE_DIM_X = 254
 IMAGE_DIM_Y = 254
 
-NUM_IMAGES = 40000
+NUM_IMAGES = 2000
 
 def generate_image_batch(dir, number):
     if os.path.isdir(dir) != True:

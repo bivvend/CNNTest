@@ -14,6 +14,8 @@ from keras import layers
 from keras import models
 from keras import optimizers
 
+from vis.visualization import visualize_cam
+
 import matplotlib.pyplot as plt
 
 IMAGE_DIR = "GemImages"
@@ -69,7 +71,8 @@ if __name__ == '__main__':
     model.add(layers.Conv2D(128, (3,3), activation='relu'))
     model.add(layers.MaxPooling2D((2, 2)))
     model.add(layers.Conv2D(128, (3,3), activation='relu'))
-    model.add(layers.Flatten())
+    model.add(layers.GlobalAveragePooling2D())
+    #model.add(layers.Flatten())
     model.add(layers.Dense(512, activation='relu'))
     model.add(layers.Dense(len(POSSIBLE_SHAPES), activation='softmax'))
 
@@ -87,9 +90,9 @@ if __name__ == '__main__':
         validation_steps = 50)  
     
     model_json = model.to_json()
-    with open("gem_classification_model.json", "w") as json_file:
+    with open("gem_classification_model_with_cam.json", "w") as json_file:
         json_file.write(model_json)    
-    model.save_weights("cnn_gem_shapes.h5")
+    model.save_weights("cnn_gem_shapes_with_cam.h5")
     print("Saved model to disk")
 
     acc = history.history['acc']
