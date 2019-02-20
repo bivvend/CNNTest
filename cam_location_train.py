@@ -14,8 +14,6 @@ from keras import layers
 from keras import models
 from keras import optimizers
 
-from vis.visualization import visualize_cam
-
 import matplotlib.pyplot as plt
 
 IMAGE_DIR = "GemImages"
@@ -81,11 +79,13 @@ if __name__ == '__main__':
     model.compile(loss='mean_squared_error',     #mean_squared_error 
                 optimizer=optimizers.RMSprop(lr=2e-5),
                 metrics=['acc']) 
-
+    
+    print("Classes " + str(train_generator.class_indices))
+    text = input("Press a key to start training...")
     history = model.fit_generator(
         train_generator,
         steps_per_epoch = 100,
-        epochs = 150,
+        epochs = 250,
         validation_data = validation_generator,
         validation_steps = 50)  
     
