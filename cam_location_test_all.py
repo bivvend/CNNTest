@@ -102,12 +102,15 @@ if __name__ == '__main__':
         fig = plt.figure(figsize = (10, 10))
         
         for i in range(len(all_images)):
-            fig.add_subplot(NUM_IMAGES, len(tests) +1, (i * (len(tests) + 1)) + 1)    
+            fig.add_subplot(NUM_IMAGES, len(tests) +2, (i * (len(tests) + 1)) + 1)    
             plt.axis('off')
             plt.imshow(all_images[i])
+            heat_maps = []
             for j in range(len(tests)):                
                 heat_map = visualize_cam(loaded_model, 9, [j], all_images[i], backprop_modifier=None)
-                fig.add_subplot(NUM_IMAGES, len(tests) +1 , (i * (len(tests) + 1)) + j + 2)
+                heat_maps.append(heat_map)               
+
+                fig.add_subplot(NUM_IMAGES, len(tests) +2 , (i * (len(tests) + 2)) + j + 2)
                 plt.axis('off')
                 plt.title(tests[j][1]) 
 
@@ -116,8 +119,7 @@ if __name__ == '__main__':
                 grey_image = cv2.cvtColor(heat_map, cv2.COLOR_BGR2GRAY)
                 
                 #convert the grayscale image to binary image
-                ret,thresh = cv2.threshold(grey_image,100,255,0)
-                
+                ret,thresh = cv2.threshold(grey_image,100,255,0)                
                 
                 # calculate moments of binary image
                 M = cv2.moments(thresh)
@@ -131,8 +133,30 @@ if __name__ == '__main__':
                 
                 # display the image
                 plt.imshow(heat_map)
-
-
+                
+            sum = np.ones(heat_map.shape)
+            for map in heat_maps:
+                sum = sum + map
+            sum = sum / len(tests)
+            sum.astype(int)
+            print(sum)
+            
+            #grey_image2 = cv2.cvtColor(sum, cv2.COLOR_BGR2GRAY)
+                
+            #convert the grayscale image to binary image
+            #ret2,thresh2 = cv2.threshold(grey_image2,100,255,0)           
+            
+            # calculate moments of binary image
+            #M = cv2.moments(thresh2)
+            
+            # calculate x,y coordinate of center
+            #if M["m00"] != 0:
+                #cX = int(M["m10"] / M["m00"])
+               #cY = int(M["m01"] / M["m00"])                
+                #highlight the center
+                #cv2.circle(sum, (cX, cY), 5, (255, 255, 255), -1)
+            fig.add_subplot(NUM_IMAGES, len(tests) +2 , (i * (len(tests) + 2)) + len(tests) + 1)
+            plt.imshow(sum)  
         fig.suptitle(test[1])
         plt.show()
 

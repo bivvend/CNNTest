@@ -32,8 +32,8 @@ def generate_image_batch(dir, number):
         background_colour = 100
         image = np.zeros([IMAGE_DIM_X, IMAGE_DIM_Y, 3], dtype=np.uint8) + background_colour
         buffer = 60
-        y = random.randint(buffer, IMAGE_DIM_Y - buffer - 1)
-        x = random.randint(buffer, IMAGE_DIM_X - buffer - 1)
+        y = random.randint(buffer + 20, IMAGE_DIM_Y - buffer -20 - 1)
+        x = random.randint(buffer + 20, IMAGE_DIM_X - buffer -20 - 1)
         angle = random.randint(-180, 180) # number will be rescaled based on shape
         # Size
         s = random.randint(buffer, int(IMAGE_DIM_X/4)) 
@@ -46,6 +46,7 @@ def generate_image_batch(dir, number):
         #Make sub directory for generator
         
         cv2.imwrite(filepath, image) 
+
 
 def rotate( vec, angle):
 
